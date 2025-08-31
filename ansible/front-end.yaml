@@ -1,0 +1,58 @@
+- name: Setup Frontend Server
+  hosts: frontend-server
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start and enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Copy frontend build files
+      copy:
+        src: ./build/
+        dest: /var/www/html/
+        owner: www-data
+        group: www-data
+        mode: 0755
+
+    - name: Configure Nginx to serve frontend
+      copy:
+        dest: /etc/nginx/sites-available/frontend
+        content: |
+          server {
+              listen 80;
+              server_name _;
+              root /var/www/html;
+              index index.html;
+              location / {
+                  try_files $uri /index.html;
+              }
+          }
+
+    - name: Enable frontend site
+      file:
+        src: /etc/nginx/sites-available/frontend
+        dest: /etc/nginx/sites-enabled/frontend
+        state: link
+        force: yes
+
+    - name: Remove default Nginx config
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
