@@ -1,0 +1,18 @@
+📌 Project Overview
+
+This project demonstrates a complete DevOps infrastructure automation and delivery workflow by integrating IaC, Configuration Management, CI/CD, and GitOps.
+
+🔹 Key Components
+
+Terraform → Used as Infrastructure as Code (IaC) to provision AWS cloud resources such as VPC, subnets, networking components, and an EKS (Elastic Kubernetes Service) cluster.
+
+AWS EKS (Kubernetes) → Provides a scalable, managed Kubernetes platform to orchestrate containerized applications.
+
+Helm → Package manager for Kubernetes to simplify application deployment using charts.
+
+ArgoCD (GitOps) → Manages application deployments in EKS by continuously syncing the Git repository state with the cluster.
+
+Ansible → Handles configuration management tasks such as installing required packages, system updates, and dependency setup across worker nodes or supporting servers.
+
+Jenkins (CI/CD) → Automates the Continuous Integration and Continuous Delivery pipeline, integrating with Git, building container images, pushing them to a registry, and deploying them into EKS via Helm and ArgoCD.
+

@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
     
@@ -11,7 +12,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'dev', url: 'https://github.com/jaiswaladi246/3-Tier-DevSecOps-Mega-Project.git'
+                git branch: 'deploy-to-dev-k8', url: 'https://github.com/prajwal-26/infra-to-deploy-3tier.git'
             }
         }
         
@@ -58,5 +59,36 @@ pipeline {
                 sh 'trivy fs --format table -o fs-report.html .'
             }
         }
+        
+        stage('Build-Tag & Push Backend Docker Image') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-cred') {
+                        dir('api') {
+                            sh 'docker build -t admin9010/backend:latest .'
+                            sh 'trivy image --format table -o backend-image-report.html admin9010/backend:latest '
+                            sh 'docker push admin9010/backend:latest'
+                           
+                        }
+                    }
+                }
+            }
+        }  
+            
+        stage('Build-Tag & Push Frontend Docker Image') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-cred') {
+                        dir('client') {
+                            sh 'docker build -t admin9010/frontend:latest .'
+                            sh 'trivy image --format table -o frontend-image-report.html admin9010/frontend:latest '
+                            sh 'docker push admin9010/frontend:latest'
+                        }
+                    }
+                }
+            }
+             
+        }  
+
     }
 }
