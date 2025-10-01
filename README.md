@@ -1,4 +1,4 @@
-(./images/P1.png)
+![Project Screenshot](./images/P1.png)
 
 ## Steps to Run the Project
 
