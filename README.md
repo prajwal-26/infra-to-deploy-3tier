@@ -1,4 +1,4 @@
-(./images/p1.png)
+(./images/P1.png)
 
 ## Steps to Run the Project
 
